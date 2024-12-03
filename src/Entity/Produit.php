@@ -24,10 +24,12 @@ class Produit
     private ?float $prix = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datecreation = null;
+    private ?\DateTimeInterface $dateCreation = null;
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
     private ?Categorie $categorie = null;
+
+  
 
     public function getId(): ?int
     {
@@ -70,14 +72,14 @@ class Produit
         return $this;
     }
 
-    public function getDatecreation(): ?\DateTimeInterface
+    public function getDateCreation(): ?\DateTimeInterface
     {
-        return $this->datecreation;
+        return $this->dateCreation;
     }
 
-    public function setDatecreation(\DateTimeInterface $datecreation): static
+    public function setDateCreation(\DateTimeInterface $dateCreation): static
     {
-        $this->datecreation = $datecreation;
+        $this->dateCreation = $dateCreation;
 
         return $this;
     }
@@ -92,5 +94,17 @@ class Produit
         $this->categorie = $categorie;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'nom' => $this->getNom(),
+            'description' => $this->getDescription(),
+            'prix' => $this->getPrix(),
+            'dateCreation' => $this->getDateCreation()?->format('Y-m-d H:i:s'),
+            'categorie' => $this->getCategorie()?->getNom() ?? null,
+        ];
     }
 }
