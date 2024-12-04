@@ -2,13 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Categorie;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Produit;
 use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request; 
 use Symfony\Component\HttpFoundation\JsonResponse;

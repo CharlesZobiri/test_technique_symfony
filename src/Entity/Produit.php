@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ProduitRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Mime\Message;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
@@ -18,7 +17,7 @@ class Produit
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom du produit ne peut pas être vide.")]
-    #[Assert\Length(min: 2, max: 255, minMessage: "Le nom du produit doit contenir au minimum {{ 2 }} caractères.")]
+    #[Assert\Length(min: 2, max: 255, minMessage: "Le nom du produit doit contenir au minimum {{ limit }} caractères.")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
