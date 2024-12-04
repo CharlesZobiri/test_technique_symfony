@@ -46,6 +46,7 @@ class CategorieController extends AbstractController
         ], JsonResponse::HTTP_CREATED);
     }
 
+
     #[Route('api/categorie/update/{id}', name: 'update_categorie', methods: ['PUT'])]
     public function updateCategorie(int $id, Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): JsonResponse
     {
@@ -67,6 +68,23 @@ class CategorieController extends AbstractController
         return $this->json([
             'message' => 'Catégorie mise à jour avec succès',
             'catégorie' => $categorie->toArray(),
+        ], JsonResponse::HTTP_OK);
+    }
+
+
+    #[Route('api/categorie/delete/{id}', name: 'delete_categorie', methods: ['DELETE'])]
+    public function deleteCategorie(int $id, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): JsonResponse
+    {
+        $categorie = $categorieRepository->find($id);
+        if (!$categorie) {
+            return $this->json(['error' => 'Catégorie non trouvée'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($categorie);
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Catégorie supprimée avec succès',
         ], JsonResponse::HTTP_OK);
     }
 }
