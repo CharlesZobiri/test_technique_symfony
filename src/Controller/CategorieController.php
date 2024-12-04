@@ -7,6 +7,7 @@ use App\Entity\Categorie;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request; 
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,5 +44,29 @@ class CategorieController extends AbstractController
             'message' => 'Catégorie créée avec succès',
             'catégorie' => $categorie->toArray()
         ], JsonResponse::HTTP_CREATED);
+    }
+
+    #[Route('api/categorie/update/{id}', name: 'update_categorie', methods: ['PUT'])]
+    public function updateCategorie(int $id, Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if (!$data || !isset($data['nom'])) {
+            return $this->json(['error' => 'Nom de la catégorie manquant ou données invalides'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $categorie = $categorieRepository->find($id);
+        if (!$categorie) {
+            return $this->json(['error' => 'Catégorie non trouvée'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $categorie->setNom($data['nom']);
+
+        $entityManager->persist($categorie);
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Catégorie mise à jour avec succès',
+            'catégorie' => $categorie->toArray(),
+        ], JsonResponse::HTTP_OK);
     }
 }
