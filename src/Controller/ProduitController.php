@@ -27,7 +27,7 @@ class ProduitController extends AbstractController
 
 
     #[Route('/api/produit/create', name: 'create_produit', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): JsonResponse
+    public function createProduit(Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): JsonResponse
     {
         // Récupération des données de la requête $data = tableau
         $data = json_decode($request->getContent(), true);
