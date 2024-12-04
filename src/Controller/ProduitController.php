@@ -60,7 +60,7 @@ class ProduitController extends AbstractController
     }
 
 
-    #[Route('/api/produit/update/{id}', name: 'upadta_produit', methods: ['PUT'])]
+    #[Route('/api/produit/update/{id}', name: 'update_produit', methods: ['PUT'])]
     public function updateProduit(int $id, Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository, EntityManagerInterface $entityManager): JsonResponse 
     {
         $produit = $produitRepository->find($id);
