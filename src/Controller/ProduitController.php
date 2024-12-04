@@ -11,7 +11,8 @@ use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request; 
-use Symfony\Component\HttpFoundation\JsonResponse; 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProduitController extends AbstractController
 {
@@ -27,7 +28,7 @@ class ProduitController extends AbstractController
 
 
     #[Route('/api/produit/create', name: 'create_produit', methods: ['POST'])]
-    public function createProduit(Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository): JsonResponse
+    public function createProduit(Request $request, EntityManagerInterface $entityManager, CategorieRepository $categorieRepository, ValidatorInterface $validator): JsonResponse
     {
         // Récupération des données de la requête $data = tableau
         $data = json_decode($request->getContent(), true);
@@ -50,6 +51,15 @@ class ProduitController extends AbstractController
 
         $produit->setCategorie($categorie);
 
+        $errors = $validator->validate($produit);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+            return $this->json(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
         $entityManager->persist($produit);
         $entityManager->flush();
 
@@ -61,7 +71,7 @@ class ProduitController extends AbstractController
 
 
     #[Route('/api/produit/update/{id}', name: 'update_produit', methods: ['PUT'])]
-    public function updateProduit(int $id, Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository, EntityManagerInterface $entityManager): JsonResponse 
+    public function updateProduit(int $id, Request $request, ProduitRepository $produitRepository, CategorieRepository $categorieRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse 
     {
         $produit = $produitRepository->find($id);
         if (!$produit) {
@@ -90,10 +100,19 @@ class ProduitController extends AbstractController
             $categorie = $categorieRepository->findOneBy(['nom' => $data['categorie']]);
 
             if (!$categorie) {
-                return $this->json(['error' => 'Catégorie non trouvée'], JsonResponse::HTTP_BAD_REQUEST);
+                return $this->json(['errors' => 'Catégorie non trouvée'], JsonResponse::HTTP_BAD_REQUEST);
             }
 
             $produit->setCategorie($categorie);
+        }
+
+        $errors = $validator->validate($produit);
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+            return $this->json(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $entityManager->flush();
