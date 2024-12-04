@@ -105,4 +105,23 @@ class ProduitController extends AbstractController
 
     }
 
+
+    #[Route('/api/produit/delete/{id}', name: 'delete_produit', methods: ['DELETE'])]
+    public function deleteProduit(int $id, ProduitRepository $produitRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $produit = $produitRepository->find($id);
+
+        if (!$produit) {
+            return $this->json(['error' => 'Produit non trouvé'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($produit);
+        $entityManager->flush();
+
+
+        return $this->json([
+            'message' => 'Produit supprimé avec succès',
+        ], JsonResponse::HTTP_OK);
+    }
+
 }
