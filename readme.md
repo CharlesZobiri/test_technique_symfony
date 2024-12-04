@@ -52,9 +52,9 @@ La base de données utilise **MySQL**, configurée via Doctrine, et les informat
    composer install 
    ```
 
-3.  **Configurer la base de données**
+3. **Configurer la base de données**
 
-   Modifiez le fichier .env.local.example pour configurer la connexion à la base de        données.
+   Modifiez le fichier .env.local.example pour configurer la connexion à la base de données.
 
    Remplacez la variable `DATABASE_URL` dans .env.local par vos informations de connexion MySQL :
    ```dotenv
@@ -122,7 +122,8 @@ Une fois que l'application est en cours d'exécution, vous pouvez tester les dif
 ### Exemple de création d'une catégorie
 
 Pour ce faire, allez dans l'application `Postman`, ouvrez un nouvel onglet, allez dans `Body` et sélectionnez `raw` en type `JSON`. 
-À présent pour créer une catégorie veuillez inscire dans le champs d'url `http://localhost:8000{le_Endpoint_ciblé_pour_le_test}`.
+À présent pour créer une catégorie veuillez inscire dans le champs d'url :
+`http://localhost:8000{le_Endpoint_ciblé_pour_le_test}`.
 
 Choisissez l'option `POST`, vous n'avez plus qu'à écrire votre requête comme sur les exemples fournis et à appuyez  sur `SEND`.
 
