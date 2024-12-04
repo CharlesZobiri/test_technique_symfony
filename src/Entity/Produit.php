@@ -18,7 +18,7 @@ class Produit
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom du produit ne peut pas être vide.")]
-    #[Assert\Length(min: 2, max: 255, minMessage: "Le nom du produit doit contenir au minimum {2} caractères.")]
+    #[Assert\Length(min: 2, max: 255, minMessage: "Le nom du produit doit contenir au minimum {{ 2 }} caractères.")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
